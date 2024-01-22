@@ -168,4 +168,3 @@ const whereAmI = function (latitude, longitude) {
 }
 
 
-// whereAmI(-33.933, 18.474);
