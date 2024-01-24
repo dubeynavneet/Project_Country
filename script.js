@@ -151,20 +151,20 @@ GOOD LUCK 😀
 
 
 // const whereAmI = function (latitude, longitude) {
-//     const req = fetch(`https://geocode.xyz/${latitude},${longitude}?geoit=json&auth=632423280315957209588x106422`);
-//     console.log(req);
-//         req.then((response) => {
-//             console.log(response);
-//             if (!response.ok) throw new Error("City not found");
-//             return response.json();
-//         })
-//         .then((data) => {
-//             console.log(data);
-//             console.log(`You are in ${data.city}, ${data.country}`);
-//             getCountryData(data.country);
-//         }).catch(err => {
-//             console.error(err);
-//         })
+// const req = fetch(`https://geocode.xyz/${latitude},${longitude}?geoit=json&auth=632423280315957209588x106422`);
+// console.log(req);
+//     req.then((response) => {
+//         console.log(response);
+//         if (!response.ok) throw new Error("City not found");
+//         return response.json();
+//     })
+//     .then((data) => {
+//         console.log(data);
+//         console.log(`You are in ${data.city}, ${data.country}`);
+//         getCountryData(data.country);
+//     }).catch(err => {
+//         console.error(err);
+//     })
 // }
 
 
@@ -218,11 +218,41 @@ GOOD LUCK 😀
 //     console.log('I waited for 4 second');   
 // });
 
-const getPosition = function(){
-    return new Promise(function(resolve,reject){
+const getPosition = function () {
+    return new Promise(function (resolve, reject) {
         // navigator.geolocation.getCurrentPosition(position => resolve(position),err => reject(err))
-        navigator.geolocation.getCurrentPosition(resolve,reject);
-        });
+        navigator.geolocation.getCurrentPosition(resolve, reject);
+    });
 };
 
-getPosition().then(pos => console.log(pos)).catch(err => console.log(err));
+
+
+const whereAmI = function () {
+    getPosition()
+        .then(
+            pos => {
+                console.log(pos.coords);
+                const {latitude , longitude} = pos.coords;
+
+                const req = fetch(`https://geocode.xyz/${latitude},${longitude}?geoit=json&auth=632423280315957209588x106422`);
+                console.log(req);
+                req.then((response) => {
+                    console.log(response);
+                    if (!response.ok) throw new Error("City not found");
+                    return response.json();
+                })
+                    .then((data) => {
+                        console.log(data);
+                        console.log(`You are in ${data.city}, ${data.country}`);
+                        getCountryData(data.country);
+                    }).catch(err => {
+                        console.error(err);
+                    })
+            }
+        )
+        .catch(
+            err => console.log(err)
+        );
+}
+
+btn.addEventListener('click',whereAmI);
