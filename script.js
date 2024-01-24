@@ -27,8 +27,8 @@ const renderCountry = function (data, className = '') {
     // countriesContainer.style.opacity = 1;
 }
 
-const renderError = function(msg){
-    countriesContainer.insertAdjacentText('beforeend',msg);
+const renderError = function (msg) {
+    countriesContainer.insertAdjacentText('beforeend', msg);
     // countriesContainer.style.opacity = 1;
 }
 
@@ -68,50 +68,50 @@ const renderError = function(msg){
 // };
 
 
-const getJSON = function(url,errorMessage = 'Something went wrong'){
+const getJSON = function (url, errorMessage = 'Something went wrong') {
     return fetch(url)
-    .then(function(response){
+        .then(function (response) {
 
-        // check the ok property to see country found or not
-        if(!response.ok){
-            throw new Error(`${errorMessage} (${response.status})`);
-        }
-        // console.log(response);
-        return response.json();
-    })
+            // check the ok property to see country found or not
+            if (!response.ok) {
+                throw new Error(`${errorMessage} (${response.status})`);
+            }
+            // console.log(response);
+            return response.json();
+        })
 
 }
 
-const getCountryData = function(country){
-    if(country === 'India') country = 'bharat';
-    getJSON(`https://restcountries.com/v3.1/name/${country}`,'Country not found')
-    .then((data)=>{
-        console.log(data[0]);
-        renderCountry(data[0]);
-        // getting neighbouring country
+const getCountryData = function (country) {
+    if (country === 'India') country = 'bharat';
+    getJSON(`https://restcountries.com/v3.1/name/${country}`, 'Country not found')
+        .then((data) => {
+            console.log(data[0]);
+            renderCountry(data[0]);
+            // getting neighbouring country
 
-        // hasOwnProperty tells wheather "..." property exist or not 
-        if(!data[0].hasOwnProperty("borders")){ throw new Error('No neighbour Exist!'); }
-        const neighbours = data[0].borders[0];
-        // console.log("hi");
+            // hasOwnProperty tells wheather "..." property exist or not 
+            if (!data[0].hasOwnProperty("borders")) { throw new Error('No neighbour Exist!'); }
+            const neighbours = data[0].borders[0];
+            // console.log("hi");
 
-        if(!neighbours){ throw new Error('No neighbour Exist!'); }
+            if (!neighbours) { throw new Error('No neighbour Exist!'); }
 
-        return getJSON(`https://restcountries.com/v3.1/alpha/${neighbours}`,'Country not found')
-    })
-    .then(data=>renderCountry(data[0],'neighbour'))
-    .catch(err => {
-        console.error(`${err} 💥💥💥💥💥`);
-        renderError(`Something went wrong 💥💥💥${err.message}. Try Again`);
-    })
-    .finally(()=>{
-        countriesContainer.style.opacity = 1;
-    })
+            return getJSON(`https://restcountries.com/v3.1/alpha/${neighbours}`, 'Country not found')
+        })
+        .then(data => renderCountry(data[0], 'neighbour'))
+        .catch(err => {
+            console.error(`${err} 💥💥💥💥💥`);
+            renderError(`Something went wrong 💥💥💥${err.message}. Try Again`);
+        })
+        .finally(() => {
+            countriesContainer.style.opacity = 1;
+        })
 }
 
 
-btn.addEventListener('click',function(){
-    whereAmI(19.037, 72.873);  //India
+btn.addEventListener('click', function () {
+    // whereAmI(19.037, 72.873);  //India
     // whereAmI(52.508, 13.381);
     // getCountryData('bharat');
     // getCountryData('australia');
@@ -150,21 +150,79 @@ GOOD LUCK 😀
 */
 
 
-const whereAmI = function (latitude, longitude) {
-    const req = fetch(`https://geocode.xyz/${latitude},${longitude}?geoit=json&auth=632423280315957209588x106422`);
-    console.log(req);
-        req.then((response) => {
-            console.log(response);
-            if (!response.ok) throw new Error("City not found");
-            return response.json();
-        })
-        .then((data) => {
-            console.log(data);
-            console.log(`You are in ${data.city}, ${data.country}`);
-            getCountryData(data.country);
-        }).catch(err => {
-            console.error(err);
-        })
-}
+// const whereAmI = function (latitude, longitude) {
+//     const req = fetch(`https://geocode.xyz/${latitude},${longitude}?geoit=json&auth=632423280315957209588x106422`);
+//     console.log(req);
+//         req.then((response) => {
+//             console.log(response);
+//             if (!response.ok) throw new Error("City not found");
+//             return response.json();
+//         })
+//         .then((data) => {
+//             console.log(data);
+//             console.log(`You are in ${data.city}, ${data.country}`);
+//             getCountryData(data.country);
+//         }).catch(err => {
+//             console.error(err);
+//         })
+// }
 
 
+// creating and consuming a promise
+
+// const lotteryTicket = new Promise(function (resolve, reject) {
+//     console.log("Showing results in 2 sec");
+//     setTimeout(() => {
+//         let a = Math.random();
+//         console.log(a);
+//         if (a >= 0.5)
+//             resolve('You Win');
+//         else
+//             reject(new Error('You lost'));
+//     }, 2000)
+// })
+// console.log(lotteryTicket);
+// lotteryTicket.then(res => console.log(res)).catch(err => console.error(err));
+
+// setTimeout(()=>{
+//     console.log('1 sec passed');
+//     setTimeout(()=>{
+//         console.log('2 sec passed');
+//         setTimeout(() => {
+//             console.log('3 sec passed');
+//             setTimeout(()=>{
+//                 console.log('4 sec passed');
+//             },1000)
+//         }, 1000);
+//     },1000)
+// },1000)
+
+
+// Promisifying
+// const wait = function (seconds) {
+//     return new Promise(function (resolve) {
+//         setTimeout(resolve, seconds * 1000);
+//     })
+// }
+
+// wait(1).then(() => {
+//     console.log('I waited for 1 second');
+//     return wait(1);
+// }).then(() => {
+//     console.log('I waited for 2 second');
+//     return wait(1);   
+// }).then(() => {
+//     console.log('I waited for 3 second');
+//     return wait(1);   
+// }).then(() => {
+//     console.log('I waited for 4 second');   
+// });
+
+const getPosition = function(){
+    return new Promise(function(resolve,reject){
+        // navigator.geolocation.getCurrentPosition(position => resolve(position),err => reject(err))
+        navigator.geolocation.getCurrentPosition(resolve,reject);
+        });
+};
+
+getPosition().then(pos => console.log(pos)).catch(err => console.log(err));
